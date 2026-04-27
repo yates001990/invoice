@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invoice #100</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #1a2d5a;
+      --blue-mid: #2e5599;
+      --blue-light: #4a78c4;
+      --accent: #3a6abf;
+      --gray-light: #f0f2f5;
+      --gray-row: #e8ecf2;
+      --text: #1c1c2e;
+      --muted: #5a6378;
+      --white: #ffffff;
+    }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: #d0d8e8;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 16px;
+    }
+
+    .invoice-wrapper {
+      background: var(--white);
+      width: 100%;
+      max-width: 760px;
+      box-shadow: 0 8px 40px rgba(26,45,90,0.18);
+    }
+
+    /* ── HEADER ── */
+    .invoice-header {
+      position: relative;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue-mid) 45%, var(--blue-light) 100%);
+      padding: 30px 32px 28px;
+      overflow: hidden;
+      min-height: 110px;
+    }
+
+    .invoice-header::before {
+      content: '';
+      position: absolute;
+      right: -60px; top: -60px;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    }
+    .invoice-header::after {
+      content: '';
+      position: absolute;
+      right: 80px; bottom: -80px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(120,160,230,0.18) 0%, transparent 65%);
+    }
+
+    .company-name {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.3px;
+      position: relative; z-index: 1;
+    }
+    .company-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      margin-top: 5px;
+      position: relative; z-index: 1;
+      line-height: 1.6;
+    }
+
+    /* ── BODY ── */
+    .invoice-body {
+      padding: 28px 32px 36px;
+    }
+
+    /* Invoice number */
+    .invoice-meta {
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+    }
+    .invoice-number {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 20px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .invoice-date {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Bill To / For */
+    .invoice-parties {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 28px;
+    }
+    .party-block { flex: 1; }
+    .party-label {
+      font-family: 'Libre Baskerville', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .party-line {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    /* Item table */
+    .item-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+      font-size: 13.5px;
+      border: 2px solid var(--navy);
+    }
+    .item-table thead tr {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .item-table th {
+      padding: 11px 16px;
+      text-align: center;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      font-size: 13px;
+      /* outer edges navy, inner column separator gray */
+      border-top: 1px solid var(--navy);
+      border-bottom: 1px solid var(--navy);
+      border-left: 1px solid var(--navy);
+      border-right: 1px solid #b0b8c9;
+    }
+    .item-table th:last-child { border-right: 1px solid var(--navy); }
+    .item-table col.col-amount { width: 220px; }
+    .item-table tbody tr:nth-child(odd)  { background: var(--white); }
+    .item-table tbody tr:nth-child(even) { background: var(--gray-row); }
+    .item-table td {
+      padding: 12px 16px;
+      color: var(--text);
+      /* outer edges navy, inner borders gray */
+      border-top: 1px solid #b0b8c9;
+      border-bottom: 1px solid #b0b8c9;
+      border-left: 1px solid #b0b8c9;
+      border-right: 1px solid #b0b8c9;
+      height: 44px;
+      text-align: center;
+    }
+    .item-table tbody tr:first-child td { border-top: 1px solid var(--navy); }
+    .item-table tbody tr:last-child  td { border-bottom: 1px solid var(--navy); }
+    .item-table tbody td:first-child    { border-left: 1px solid var(--navy); }
+    .item-table tbody td:last-child     { border-right: 1px solid var(--navy); }
+
+    /* Totals */
+    .totals-section {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-start;
+      margin-bottom: 32px;
+      font-size: 13.5px;
+    }
+    .totals-labels {
+      display: flex;
+      flex-direction: column;
+      text-align: right;
+      padding-right: 12px;
+      color: var(--muted);
+    }
+    .totals-labels span {
+      padding: 8px 0;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .totals-labels span.total-label {
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--text);
+    }
+    .totals-table {
+      border-collapse: collapse;
+      width: 220px;
+    }
+    .totals-table td {
+      border: 1px solid #b0b8c9;
+      padding: 8px 12px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text);
+      height: 38px;
+      background: var(--white);
+    }
+    .totals-table tr:first-child td { border-top: 1px solid var(--navy); }
+    .totals-table tr:last-child  td { border-bottom: 1px solid var(--navy); }
+    .totals-table td               { border-left: 1px solid var(--navy); border-right: 1px solid var(--navy); }
+    .totals-table tr td            { border-top: 1px solid #b0b8c9; border-bottom: 1px solid #b0b8c9; }
+    .totals-table tr:first-child td { border-top: 1px solid var(--navy); }
+    .totals-table tr:last-child td  { border-bottom: 1px solid var(--navy); }
+    .totals-table tr.total-row td {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Libre Baskerville', serif;
+      font-weight: 700;
+      font-size: 14px;
+      border-color: var(--navy);
+    }
+
+    /* Footer note */
+    .invoice-footer {
+      padding-top: 20px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+    .invoice-footer .payable {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-size: 12.5px;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .invoice-wrapper { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-wrapper">
+
+    <!-- HEADER -->
+    <div class="invoice-header">
+      <div class="company-name">Company Name</div>
+      <div class="company-sub">
+        Address, City, ST, ZIP Code<br>
+        Phone Number | Fax Number
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="invoice-body">
+
+      <!-- Invoice # and Date -->
+      <div class="invoice-meta">
+        <div class="invoice-number">Invoice # 100</div>
+        <div class="invoice-date">Date: Enter Invoice Date</div>
+      </div>
+
+      <!-- Bill To / For -->
+      <div class="invoice-parties">
+        <div class="party-block">
+          <div class="party-label">Bill To</div>
+          <div class="party-line">
+            Name | Company<br>
+            Address, City, ST, ZIP Code<br>
+            Phone
+          </div>
+        </div>
+        <div class="party-block">
+          <div class="party-label">For</div>
+          <div class="party-line">Product Description</div>
+        </div>
+      </div>
+
+      <!-- Item Table -->
+      <table class="item-table">
+        <colgroup>
+          <col>
+          <col class="col-amount">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Item Description</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td></td><td></td></tr>
+          <tr><td></td><td></td></tr>
+          <tr><td></td><td></td></tr>
+          <tr><td></td><td></td></tr>
+        </tbody>
+      </table>
+
+      <!-- Totals -->
+      <div class="totals-section">
+        <div class="totals-labels">
+          <span>Subtotal</span>
+          <span>Tax Rate</span>
+          <span>Other Costs</span>
+          <span class="total-label">Total Cost</span>
+        </div>
+        <table class="totals-table">
+          <tbody>
+            <tr><td>$0.00</td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr class="total-row"><td>$0.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div class="invoice-footer">
+        <div class="payable">Make all checks payable to Company Name</div>
+        <div>
+          If you have any questions concerning this invoice, use the following contact information:<br>
+          Contact Name, Phone Number, Email<br>
+          Thank you for your business!
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
